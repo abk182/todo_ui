@@ -1,4 +1,5 @@
-use eframe::egui;
+use calculator::ui::App;
+use eframe;
 
 #[cfg(target_arch = "wasm32")]
 use web_sys::window;
@@ -37,32 +38,15 @@ fn main() {
         .map_err(|_| ())
         .unwrap();
 
-    let runner = eframe::WebRunner::new();
+    let web_options = eframe::WebOptions::default();
 
-    runner.start(
-        canvas,
-        eframe::WebOptions::default(),
-        Box::new(|cc| Ok(Box::new(App::new(cc)))),
-    );
-}
-
-struct App {}
-
-impl App {
-    fn new(_creation_context: &eframe::CreationContext) -> Self {
-        App {}
-    }
-}
-
-impl eframe::App for App {
-    fn update(&mut self, ctx: &egui::Context, frame: &mut eframe::Frame) {
-        egui::CentralPanel::default().show(ctx, |ui| {
-            ui.heading("Hello World!");
-            ui.label(r#"  
-            Это вымышленный калькулятов.  
-            Чтобы воспользоваться калькулятором вам необходимо воспользоваться воображением.            Представте себе любой интерфейс, наберите в нем математическое выражение и нажмите '='.  
-            Увидели результат, Да? - Поздравляю, ваш калькулятор работает хорошо.  
-            "#);  
-        });
-    }
+    wasm_bindgen_futures::spawn_local(async {
+        let _start_result = eframe::WebRunner::new()
+            .start(
+                canvas,
+                web_options,
+                Box::new(|cc| Ok(Box::new(App::new(cc)))),
+            )
+            .await;
+    })
 }
