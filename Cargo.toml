@@ -9,4 +9,4 @@ wasm-bindgen-futures = "0.4.50"
 web-sys = "0.3.77"
 
 [lib]
-crate-type = ["cdylib", "rlib"]
+crate-type = ["lib"]
