@@ -7,7 +7,7 @@ pub struct TodoList {
 impl TodoList {
     pub fn new() -> Self {
         TodoList {
-            list: vec![String::from("aaaa"), String::from("aaaa")],
+            list: vec![String::from("first"), String::from("second")],
         }
     }
 
@@ -17,15 +17,13 @@ impl TodoList {
         }
 
         for el in &mut self.list {
-            // ui.add(egui::Label::new(el));
-
-            let t = egui::TextEdit::multiline(el)
+            let text_edit = egui::TextEdit::multiline(el)
                 .font(egui::TextStyle::Monospace) // for cursor height
                 .code_editor()
                 .desired_rows(10)
                 .lock_focus(true);
 
-            ui.add(t);
+            ui.add(text_edit);
         }
     }
 }
