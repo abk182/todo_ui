@@ -1,0 +1,27 @@
+use eframe::egui;
+mod todo;
+use todo::Todo;
+
+pub struct TodoList {
+    list: Vec<Todo>,
+}
+
+impl TodoList {
+    pub fn new() -> Self {
+        TodoList {
+            list: vec![
+                Todo::new(String::from("first")),
+                Todo::new(String::from("second")),
+            ],
+        }
+    }
+
+    pub fn show(&mut self, ui: &mut egui::Ui) {
+        ui.horizontal(|ui| {
+            for todo in &mut self.list {
+                todo.show(ui);
+                ui.add_space(32.0);
+            }
+        });
+    }
+}
