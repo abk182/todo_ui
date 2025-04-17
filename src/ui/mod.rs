@@ -4,6 +4,7 @@ use eframe::egui;
 use todo_list::TodoList;
 
 pub struct App {
+    // TODO: add enum or trait
     widgets: Vec<TodoList>,
 }
 
