@@ -1,6 +1,8 @@
 use eframe::egui;
 use todo::Todo;
 
+use crate::ui::utils::file::list_files;
+
 mod todo;
 
 pub struct TodoList {
@@ -16,11 +18,6 @@ impl TodoList {
         todo_list
     }
 
-    pub fn load_list(&mut self) {
-        self.list.push(Todo::new(String::from("first")));
-        self.list.push(Todo::new(String::from("second")));
-    }
-
     pub fn show(&mut self, ui: &mut egui::Ui) {
         ui.horizontal(|ui| {
             for todo in &mut self.list {
@@ -28,5 +25,15 @@ impl TodoList {
                 ui.add_space(32.0);
             }
         });
+    }
+
+    fn load_list(&mut self) {
+        let files = list_files(None);
+        
+        println!("{:?}", files);
+
+        for text in vec![String::from("first todo"), String::from("second todo")] {
+            self.list.push(Todo::new(String::from(text)));
+        }
     }
 }
