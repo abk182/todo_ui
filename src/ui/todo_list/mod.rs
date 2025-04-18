@@ -8,12 +8,16 @@ pub struct TodoList {
 
 impl TodoList {
     pub fn new() -> Self {
-        TodoList {
-            list: vec![
-                Todo::new(String::from("first")),
-                Todo::new(String::from("second")),
-            ],
-        }
+        let mut todo_list = TodoList { list: vec![] };
+
+        todo_list.load_list();
+
+        todo_list
+    }
+
+    pub fn load_list(&mut self) {
+        self.list.push(Todo::new(String::from("first")));
+        self.list.push(Todo::new(String::from("second")));
     }
 
     pub fn show(&mut self, ui: &mut egui::Ui) {
