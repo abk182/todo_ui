@@ -1,6 +1,7 @@
 use eframe::egui;
-mod todo;
 use todo::Todo;
+
+mod todo;
 
 pub struct TodoList {
     list: Vec<Todo>,

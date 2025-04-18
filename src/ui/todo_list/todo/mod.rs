@@ -1,3 +1,4 @@
+use crate::ui::utils::DATE_FORMAT;
 use eframe::egui;
 pub struct Todo {
     date: chrono::DateTime<chrono::Local>,
@@ -13,9 +14,6 @@ impl Todo {
     }
 
     pub fn _from_string(raw: String) -> Self {
-        // TODO: move to utils
-        const DATE_FORMAT: &str = "%Y-%m-%d %H:%M:%S %z";
-
         let (date, content) = raw.split_once("\n").unwrap();
         Self {
             date: chrono::DateTime::parse_from_str(date, DATE_FORMAT)
@@ -26,11 +24,8 @@ impl Todo {
     }
 
     pub fn show(&mut self, ui: &mut egui::Ui) {
-        // TODO: move to utils
-        const DATE_FORMAT: &str = "%Y-%m-%d %H:%M:%S %z";
-
         ui.vertical(|ui| {
-            let date_str =  format!("Date: \n{}", self.date.format(DATE_FORMAT));
+            let date_str = format!("Date: \n{}", self.date.format(DATE_FORMAT));
 
             let label = egui::Label::new(date_str);
 
