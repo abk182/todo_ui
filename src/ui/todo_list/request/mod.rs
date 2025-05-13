@@ -32,10 +32,10 @@ impl Request {
         {
             wasm_bindgen_futures::spawn_local(async move {
                 let response = fetch_todos().await.unwrap();
-
-                let mut state = background_state.lock().unwrap();
-                state.response = Some(response);
-                state.loading = false;
+                *background_state.lock().unwrap() = State {
+                    loading: false,
+                    response: Some(response),
+                };
             });
         }
 
@@ -51,13 +51,10 @@ impl Request {
 
                 // Выполняем HTTP запрос
                 let result = rt.block_on(fetch_todos()).unwrap();
-
-                // Сохраняем результат в общее состояние
-                {
-                    let mut state = background_state.lock().unwrap();
-                    state.response = Some(result);
-                    state.loading = false;
-                }
+                *background_state.lock().unwrap() = State {
+                    loading: false,
+                    response: Some(result),
+                };
             });
         }
 
@@ -65,26 +62,13 @@ impl Request {
     }
 }
 
-/// Асинхронная функция для загрузки задач с сервера
-pub async fn fetch_todos() -> Result<Response, String> {
-    // URL сервера для получения задач
+async fn fetch_todos() -> Result<Response, String> {
     let url = "https://jsonplaceholder.typicode.com/todos?_limit=5";
-
-    // Выполняем HTTP запрос
-    let response = reqwest::get(url)
+    reqwest::get(url)
         .await
-        .map_err(|e| format!("Network error: {}", e))?;
-
-    // Проверяем статус ответа
-    if !response.status().is_success() {
-        return Err(format!("Server returned error: {}", response.status()));
-    }
-
-    // Парсим JSON
-    let response = response
+        .map_err(|e| format!("Network error: {}", e))?
         .json()
         .await
-        .map_err(|e| format!("JSON parsing error: {}", e))?;
-
-    Ok(response)
+        .map_err(|e| format!("JSON error: {}", e))
 }
+
