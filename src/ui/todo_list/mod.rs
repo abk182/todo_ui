@@ -1,24 +1,34 @@
 use eframe::egui;
+use request::Request;
 use todo::Todo;
 
-use crate::ui::utils::file::list_files;
-
+mod request;
 mod todo;
 
 pub struct TodoList {
     list: Vec<Todo>,
+    request: Option<Request>,
 }
 
 impl TodoList {
     pub fn new() -> Self {
-        let mut todo_list = TodoList { list: vec![] };
+        let mut todo_list = TodoList {
+            list: vec![],
+            request: None,
+        };
 
         todo_list.load_list();
 
         todo_list
     }
 
+    fn load_list(&mut self) {
+        self.request = Some(Request::new());
+    }
+
     pub fn show(&mut self, ui: &mut egui::Ui) {
+        self.check_request_state();
+
         ui.horizontal(|ui| {
             for todo in &mut self.list {
                 todo.show(ui);
@@ -27,13 +37,17 @@ impl TodoList {
         });
     }
 
-    fn load_list(&mut self) {
-        let files = list_files(None);
-        
-        println!("{:?}", files);
+    fn check_request_state(&mut self) {
+        if let Some(req) = &self.request {
+            let mut state = req.state.lock().unwrap();
 
-        for text in vec![String::from("first todo"), String::from("second todo")] {
-            self.list.push(Todo::new(String::from(text)));
+            if (state.loading == false) {
+                if let Some(response) = state.response.take() {
+                    for todo in response {
+                        self.list.push(Todo::new(String::from(todo.title)));
+                    };
+                }
+            }
         }
     }
 }

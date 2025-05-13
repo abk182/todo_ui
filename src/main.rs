@@ -1,4 +1,4 @@
-use calculator::ui::App;
+use todo_ui::ui::App;
 use eframe;
 
 #[cfg(target_arch = "wasm32")]
@@ -10,7 +10,7 @@ use eframe::wasm_bindgen::JsCast;
 #[cfg(not(target_arch = "wasm32"))]
 fn main() -> eframe::Result<()> {
     eframe::run_native(
-        "calculator",
+        "todo_ui",
         eframe::NativeOptions::default(),
         Box::new(|creation_context| Ok(Box::new(App::new(creation_context)))),
     )
