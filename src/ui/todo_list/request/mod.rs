@@ -50,17 +50,14 @@ impl Request {
                     .expect("Failed to create Tokio runtime");
 
                 // Выполняем HTTP запрос
-                let result = rt.block_on(fetch_todos_from_server());
+                let result = rt.block_on(fetch_todos()).unwrap();
 
                 // Сохраняем результат в общее состояние
                 {
                     let mut state = background_state.lock().unwrap();
-                    state.result = Some(result);
-                    state.is_loading = false;
+                    state.response = Some(result);
+                    state.loading = false;
                 }
-
-                // Запрашиваем перерисовку UI
-                ctx.request_repaint();
             });
         }
 
