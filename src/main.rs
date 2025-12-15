@@ -1,4 +1,5 @@
-use todo_ui::ui::App;
+use todo_ui::native;
+use todo_ui::web;
 use eframe;
 
 #[cfg(target_arch = "wasm32")]
@@ -12,7 +13,7 @@ fn main() -> eframe::Result<()> {
     eframe::run_native(
         "todo_ui",
         eframe::NativeOptions::default(),
-        Box::new(|creation_context| Ok(Box::new(App::new(creation_context)))),
+        Box::new(|creation_context| Ok(Box::new(native::App::new(creation_context)))),
     )
 }
 
@@ -37,7 +38,7 @@ fn main() {
             .start(
                 canvas,
                 web_options,
-                Box::new(|cc| Ok(Box::new(App::new(cc)))),
+                Box::new(|cc| Ok(Box::new(web::App::new(cc)))),
             )
             .await;
     })

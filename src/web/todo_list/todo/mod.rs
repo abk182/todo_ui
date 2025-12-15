@@ -1,4 +1,4 @@
-use crate::ui::utils::DATE_FORMAT;
+use crate::utils::DATE_FORMAT;
 use eframe::egui;
 pub struct Todo {
     date: chrono::DateTime<chrono::Local>,

@@ -1,7 +1,6 @@
 use eframe::egui;
 use todo_list::TodoList;
 
-mod utils;
 mod todo_list;
 
 pub struct App {
