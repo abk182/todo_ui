@@ -13,7 +13,7 @@ fn main() -> eframe::Result<()> {
     eframe::run_native(
         "todo_ui",
         eframe::NativeOptions::default(),
-        Box::new(|creation_context| Ok(Box::new(native::App::new(creation_context)))),
+        Box::new(|creation_context| Ok(Box::new(native::TodoList::new(creation_context)))),
     )
 }
 
